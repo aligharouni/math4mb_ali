@@ -1,0 +1,98 @@
+---
+title: "Untitled"
+author: "Ali"
+date: "10/02/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## class Feb 10 2021
+
+Linda Allen 2007 paper
+
+- History;
+  - SIR model by Kermac _Mc in 19s
+  - Read-Frost model 1927 1928 report of classes, in 1951 Read made a TV show by John Hopkings youtube, in 1952 Hellen Abby his student pulished, in 1976 someone published the 1928 original work.
+    - SIR model is cts in time and cts populations, deterministic, it has overlaping generations (if I can be infected as my grand childe)
+    - RF model is disc time, non-overlaping
+    
+
+
+```{r Feb10}
+## never == compare numbers wi
+## To run binomial reed-Frost process
+## Note that in Reed-Frost model, the I(t) is prevelence and at the same time it is incidence since the R-F model is a special case.
+nt <- 20 ## time steps
+y0 <- c(S=99,I=1) ## starting values
+
+## a realization of a stochasticity proc is a single draw
+S <- y0[["S"]]
+I <- y0[["I"]]
+p_i <- 0.02 ## so I am going to get R0=2
+res <-numeric(nt) ## vector for results
+res[1] <- I
+
+for(t in 2:nt){
+  new_inf <- rbinom(1,size = S,prob = 1-(1-p_i)^I)
+  I <- new_inf
+  S <- S-I
+  if(I==0) break
+  res[t] <- I
+}
+
+plot(res, type="s") ## stairsteps
+res
+
+s=99
+p_i=0.02
+I=1
+## prob of no infection
+0.98^99
+
+
+## this was 1 realization, now I want to turn into a loop and a function
+set.seed(101)
+nt <- 20 ## time steps
+y0 <- c(S=99,I=1) ## starting values
+p_i <- 0.02 ## so I am going to get R0=2
+
+rf <- function(nt,y0,p_i) {
+res <- numeric(nt)
+S <- y0[["S"]]
+I <- res[1] <- y0[["I"]]
+for (t in 2:nt) {
+I <- rbinom(1, size=S, prob=1-(1-p_i)^I)
+S <- S-I
+if (I==0) break
+res[t] <- I
+}
+return(res)
+}
+r0 <- rf(20, y0=c(S=99,I=1), p_i=0.02)
+r1 <- replicate(300, rf(20, y0=c(S=99,I=1), p_i=0.02)) ## doing the same thing some specified time here 300 times
+par(las=1,bty="l")
+matplot(r1,type="l",col=adjustcolor("black",alpha.f=0.2),lty=1) ## plot the columns of a matrix
+lines(rowMeans(r1),col=2,lwd=3) ## ave # of infections
+plot(table(colSums(r1))) ## final sizes of the epidemic (note in R-F model, the prevelence is the same as incidence )
+## why bimodal? either it dies out immidemately of there will be an epidemic
+## what happen if we make the pop size bigger? less variability in in the I_t
+
+
+## Note; if you wonder what the heck is going on with table(), try this:
+# plot(table(c(1,1,1,2,3)))
+
+
+```
+The R-F model is a general building block of any stochastic discrete time model.
+
+
+```{r Feb11}
+
+
+```
+
+
+
