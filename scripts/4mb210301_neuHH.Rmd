@@ -1,0 +1,97 @@
+---
+title: "Untitled"
+author: "Ali"
+date: "01/03/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## class March 01, 2021
+
+- keeps working on Hodgkin-Huxley model (HH) and Fitzhgo-Nagumo model
+- phase plans, computational work
+- intro to Chaos
+
+- look at H-H model, and look at the V-m phase plane
+  - finding the unstable manifold is hard
+  - it is helpfull
+
+```{r packages}
+library("reticulate") ## use_python("/usr/bin/python3")
+```
+
+```{r HHmodel}
+parms0 <- c(g_bar_Na=120,g_bar_K=36,g_L=0.3, v_Na=-115, v_K=12, v_L=-10.5989,
+C=1,I=0)
+alpha <- function(v,type) {
+switch(type,
+m=0.1*(v+25)/(exp((v+25)/10) -1),
+h=0.07*exp(v/20),
+n=0.01*(v+10)/(exp((v+10)/10) -1)
+)
+}
+beta <- function(v,type) {
+switch(type,
+m=4*exp(v/18),
+h=1/exp((v+30)/10 + 1),
+n=0.125*exp(v/80)
+)
+}
+HHgrad <- function(t,y,parms) {
+g <- with(as.list(c(y,parms)),
+c(v=-1/C*(-I + g_bar_Na*m^3*h*(v-v_Na) +
+g_bar_K*n^4*(v-v_K) +
+g_L*(v-v_L)),
+n=alpha(v,"n")*(1-n) - beta(v,"n")*n,
+m=alpha(v,"m")*(1-m) - beta(v,"m")*m,
+h=alpha(v,"h")*(1-h) - beta(v,"h")*h)
+)
+list(g)
+}
+y0 <- c(v=0,n=0.3,m=0.05,h=0.6)
+HHgrad(0,y0,parms0)
+
+plot_hh <- function(h) {
+op <- par(mfrow=c(1,2),las=1,bty="l")
+plot(h[,1],h[,2], type="l",xlab="time",ylab="V")
+cvec <- c(1,2,4) ## colours
+matplot(h[,1],h[,3:5], type="l",lty=1,xlab="time",ylab="", col=cvec)
+legend("topright",legend=c("n","m","h"),lty=1,col=cvec)
+}
+
+library(deSolve)
+res0 <- ode(y=y0,times=seq(0,60,by=0.05), func=HHgrad, parms=parms0)
+plot_hh(res0)
+## so far I am running the HH model numerically, the bifurcation diagram is more systematic
+
+## bifurcation diagram...
+library(phaseR) ## convenient phase plane analysis 
+res0 <- ode(y=y0,times=seq(0,60,by=0.05), func=HHgrad, parms=parms0)
+tail(res0,1) ## the last element of solution
+HHeq <- res0[nrow(res0),c("v","n","m","h")] ## Lazy way of finding equilibria
+
+## Now I want to redefine the dynamics in the V-m plane
+HHgrad2d <- function(t, y, parms) {
+full_y <- c(v=y[["v"]],m=y[["m"]],n=HHeq[["n"]],h=HHeq[["h"]]) ## n and h are set at the equil value
+list(HHgrad(t,full_y,parms)[[1]][c("v","m")])## call HH grad model with n & h set at equi, rerun and pull out the v and m values and put it back to the list
+}
+HHgrad2d(0,y0[c("v","m")], parms0)
+
+
+phasePlaneAnalysis(HHgrad2d,xlim=c(-120,10),
+parameters=parms0,
+state.names=c("v","m"),
+ylim=c(0,1))
+```
+
+
+```{r python_neuro}
+library(reticulate)
+
+```
+
+
+
