@@ -93,5 +93,21 @@ library(reticulate)
 
 ```
 
+## class March 03, 2021 
+
+- paper was discussed; Dynamical phases of the Hindmarsh-Rose neuronal model: Studies of the transition from bursting to spiking chaos
+Chaos 17, 043128 (2007); (https://doi.org/10.1063/1.2818153)
+Giacomo Innocenti et al
+
+## class March 04, 2021 
+
+more talking about chaos
+
+
+
+
+
+
+
 
 
