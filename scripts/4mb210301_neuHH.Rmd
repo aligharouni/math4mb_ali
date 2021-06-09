@@ -103,6 +103,62 @@ Giacomo Innocenti et al
 
 more talking about chaos
 
+## class March 08, 2021 
+
+Deterministic Chaos old stories, is mother nature a chaotic attractor?
+
+
+Numerical bifurcation analysis:
+- left off [ali, google the package and do it yourself!] see [examples](https://tbb.bio.uu.nl/rdb/grindR/tutorial.pdf)
+```{r 8mar2021, echo=FALSE}
+remotes::install_github("hansschepers/grindr")
+library(deSolve)
+library(rootSolve)
+library(FME)
+library(coda)
+library(Grind)
+
+```
+
+## class March 10, 2021 
+
+ We talked about the Bolker and Grenfell 1993 paper seasonal forcing of SIR model, the age structure settled a bit the chaos
+- biannual cycle
+- discontinuous bifurcation; one way to get such a thing, when the eigenvals crosses the complex plane, hopf bif
+- Also Earn et al. (2000)
+- numerical continuation method; following an quilibrium or a cycle
+  - Newton Raphson method and follow stable  or unstable equilibria F(X)=0
+  - 
+
+## class March 15, 2021 
+ We talked about paper: Hopfield, J. J. 1982. “Neural Networks and Physical Systems with Emergent Collective Computational Abilities.” Proceedings of the National Academy of Sciences 79 (8): 2554–8.
+
+## class March 17, 2021 
+ We talked about paper: Hopfield, J. J. 1982. “Neural Networks and Physical Systems with Emergent Collective Computational Abilities.” Proceedings of the National Academy of Sciences 79 (8): 2554–8.
+ - all about remembering static memory
+
+- not recorded, I voice recorded.
+- Eq 9 in the paper, what is ln M? this the definition of entropy. it represents the measure of potential information content, how much the system store information, the p_i are the partitions. let I have 10 states, but 99.9 of the time it fall that 1 of those basin of attractions are dominant,
+
+- stable state is corresponding to memory, we set up the network, we picked the bit string that you want to remember.
+- He basically assumes that memories are randomly distributed in the state space. 
+- there are hopf network codes but all are synchronous rather than asynchronous [?]
+- A lot of the proofs in the paper depends on the symmetry, T_ij and T_ji. If you are thinking of neuron, biologically we don't have symmetry (a linear connection of neurons to propagate pain signal to brain, not all connected to each other to do so) but computationally in the appear we do.
+
+- Neural network are about learning to remember things, is exactly similar to this Hopffield network do. The way the NN is trained is giving them an input pattern and ask to classify it and if they recognize it you give them a weight. So you have a set of inputs, neuron get the input and the first layer talks to next layer of neurons and move forward never backwards. They are asymmetric and their are no loops.
+  - May be there are works on training Hopfield network, we can derive some properties and we can relax those to better understand.
+- the relationship between Hamming distance and distance in dynamical system....
+- 
+
+## class March 25, 2021
+Evolutionary biology modeling;
+
+## class March 31, 2021
+projects.
+
+## class April 1, 2021
+evolution dynamics of disease. PDE
+
 
 
 
